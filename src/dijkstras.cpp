@@ -1,10 +1,7 @@
 #include "dijkstras.h"
 #include <iostream>
 #include <queue>
-
-// bool operator>(const Edge& a, const Edge& b) {
-//     return a.weight > b.weight;
-// }
+#include <algorithm>
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
     int numVertices = G.size();
@@ -40,13 +37,19 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
 }
 
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination) {
-    // vector<int> palce;
-    // return palce;
-    
+    vector<int> reversed;
+    while (destination != -1) {
+        reversed.push_back(destination);
+        destination = previous[destination];
+    }
+    reverse(reversed.begin(), reversed.end());
+    return reversed;
 }
 
 void print_path(const vector<int>& v, int total) {
     for (int i = 0; i < total; ++i) {
-        std::cout << v[i] << " ";
+        std::cout << v[i] << ' ';
     }
+    std::cout << '\n';
+    std::cout << "Total cost is " << total << ' ';
 }
