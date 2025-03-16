@@ -14,7 +14,7 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     std::priority_queue<pair<int,int>, vector<pair<int,int> >, std::greater<pair<int, int> > > minHeap;
     minHeap.push({source, 0});
     while (!minHeap.empty()) {
-        int u = minHeap.top().first;
+        int u = minHeap.top().second;
         minHeap.pop();
 
         if (visited[u]) { continue; }
