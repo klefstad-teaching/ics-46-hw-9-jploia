@@ -4,6 +4,7 @@
 #include <string>
 #include <set>
 #include <cmath>
+#include <fstream>
 
 void error(string word1, string word2, string msg) {
     std::cout << word1 << word2 << msg << '\n';
@@ -85,8 +86,17 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     return empty;
 }
 
-void load_words(set<string> & word_list, const string& file_name) {
-    return;
+void load_words(std::set<string> & word_list, const string& file_name) {
+    ifstream in(file_name);
+    if (!in) {
+        throw runtime_error("Can't open input file");
+    }
+    std::string word;
+    while (in) {
+       in >> word; 
+       word_list.insert(word);
+    }
+    in.close();
 }
 
 void print_word_ladder(const vector<string>& ladder) {
