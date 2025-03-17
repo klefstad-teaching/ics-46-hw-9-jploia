@@ -76,6 +76,14 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         return {};
     }
 
+    // generate all the word neighbors for all the words
+    std::map<std::string, vector<std::string> > adj_lst;
+    for (const auto& word : word_list) {
+        for (const auto& key : generate_neighbors(word)) {
+            adj_lst[key].push_back(word);
+        }
+    }
+
     std::queue<std::vector<std::string>> ladder_queue;
     ladder_queue.push({begin_word});
     std::set<std::string> visited;
@@ -84,15 +92,17 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         std::vector<std::string> ladder = ladder_queue.front();
         ladder_queue.pop();
         std::string last_word = ladder.back();
-        if (last_word == end_word) {
-            return ladder;
-        }
-        for (const auto& word : word_list) {
-            if (visited.find(word) == visited.end() && is_adjacent(last_word, word)) {
-                std::vector<std::string> new_ladder = ladder;
-                new_ladder.push_back(word);
-                ladder_queue.push(new_ladder);
-                visited.insert(word);
+        for (const auto& key : generate_neighbors(last_word)) {
+            for (const auto& word : adj_lst[key]) {
+                if (visited.find(word) == visited.end()) {
+                    std::vector<std::string> new_ladder = ladder;
+                    new_ladder.push_back(word);
+                    if (word == end_word) {
+                        return new_ladder;
+                    }
+                    ladder_queue.push(new_ladder);
+                    visited.insert(word);
+                }                
             }
         }
     }
@@ -126,7 +136,7 @@ void print_word_ladder(const vector<string>& ladder) {
 
 void verify_word_ladder() {
     std::set<string> word_list;
-    load_words(word_list, "words.txt");
+    load_words(word_list, "src/words.txt");
     my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
     my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
     my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
