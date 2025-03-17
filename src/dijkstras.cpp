@@ -8,7 +8,7 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     // the graph itself is the adjacency list 
     // source is the vertex 
     vector<int> distances(numVertices, INF);
-    vector<bool> visited(numVertices, false);
+    // vector<bool> visited(numVertices, false);
     distances[source] = 0;
     previous.assign(numVertices, -1);
     std::priority_queue<pair<int,int>, vector<pair<int,int> >, std::greater<pair<int, int> > > minHeap;
@@ -18,9 +18,9 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
         // int u_weight = minHeap.top().first;
         minHeap.pop();
 
-        if (visited[u]) { continue; }
+        // if (visited[u]) { continue; }
 
-        visited[u] = true;
+        // visited[u] = true;
 
         for (const auto& edge : G[u]) {
             int v = edge.dst;
