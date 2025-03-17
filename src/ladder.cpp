@@ -56,12 +56,8 @@ bool is_adjacent(const string& word1, const string& word2) {
 
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
-    if (word_list.find(end_word) == word_list.end()) {
+    if (word_list.find(end_word) == word_list.end() || begin_word == end_word ) {
         return {};
-    }
-
-    if (begin_word == end_word) {
-        return {begin_word};
     }
 
     std::queue<std::vector<std::string>> ladder_queue;
