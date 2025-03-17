@@ -53,38 +53,38 @@ bool is_adjacent(const string& word1, const string& word2) {
     return edit_distance_within(word1, word2, 1);
 }
 
-vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
-    if (begin_word == end_word) {
-        vector<std::string> empty;
-        return empty;
-    }
-    std::queue<vector<std::string> > ladder_queue;
-    std::vector<std::string> begin_ladder;
-    begin_ladder.push_back(begin_word);
-    ladder_queue.push(begin_ladder);
-    std::set<string> visited;
-    visited.insert(begin_word);
 
+
+vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
+    if (word_list.find(end_word) == word_list.end()) {
+        return {};
+    }
+
+    if (begin_word == end_word) {
+        return {begin_word};
+    }
+
+    std::queue<std::vector<std::string>> ladder_queue;
+    ladder_queue.push({begin_word});
+    std::set<std::string> visited;
+    visited.insert(begin_word);
     while (!ladder_queue.empty()) {
-        vector<std::string> ladder = ladder_queue.front();
+        std::vector<std::string> ladder = ladder_queue.front();
         ladder_queue.pop();
         std::string last_word = ladder.back();
+        if (last_word == end_word) {
+            return ladder;
+        }
         for (const auto& word : word_list) {
-            if (is_adjacent(last_word, word)) {
-                if (visited.find(word) != visited.end()) {
-                    visited.insert(word);
-                    vector<std::string> new_ladder = ladder;
-                    new_ladder.push_back(word);
-                    if (word == end_word) {
-                        return new_ladder;
-                    }
-                    ladder_queue.push(new_ladder);
-                }
+            if (visited.find(word) == visited.end() && is_adjacent(last_word, word)) {
+                std::vector<std::string> new_ladder = ladder;
+                new_ladder.push_back(word);
+                ladder_queue.push(new_ladder);
+                visited.insert(word);
             }
         }
     }
-    vector<std::string> empty;
-    return empty;
+    return {};
 }
 
 void load_words(std::set<string> & word_list, const string& file_name) {
