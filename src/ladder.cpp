@@ -3,24 +3,58 @@
 #include <queue>
 #include <string>
 #include <set>
+#include <cmath>
 
 void error(string word1, string word2, string msg) {
     std::cout << word1 << word2 << msg << '\n';
 }
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d) {
+    int str1_len = str1.length();
+    int str2_len = str2.length();
+    if (abs(str1_len - str2_len) > d) {
+        return false;
+    }
+
+    int str1_counter = 0;
+    int str2_counter = 0;
+    int diff = 0;
+    while (str1_counter < str1_len && str2_counter < str2_len) {
+        if (str1[str1_counter] == str2[str2_counter]) {
+            ++str1_counter;
+            ++str2_counter;
+        } else {
+            if (str1_len < str2_len) {
+                ++str2_counter;
+            } else if (str1_len > str2_len) {
+                ++str1_counter;
+            } else {
+                ++str1_counter;
+                ++str2_counter;
+                ++diff;
+            }
+        }
+
+        if (diff > d) {
+            return false;
+        }
+    }
+
+    if (str1_counter == str2_counter || abs(str1_counter - str2_counter) == d) {
+        return true;
+    }
+
     return false;
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
-    return false;
+    return edit_distance_within(word1, word2, 1);
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
     if (begin_word == end_word) {
         vector<std::string> empty;
         return empty;
-
     }
     std::queue<vector<std::string> > ladder_queue;
     std::vector<std::string> begin_ladder;
