@@ -53,7 +53,23 @@ bool is_adjacent(const string& word1, const string& word2) {
     return edit_distance_within(word1, word2, 1);
 }
 
+vector<std::string> generate_neighbors(const string& word) {
+    vector<std::string> neighbors;
+    int word_len = word.length();
+    for (int i = 0; i < word_len; ++i) {
+        std::string insertU = word;
+        insertU = insertU.insert(i, 1, '_');
+        std::string changeU = word;
+        changeU[i] = '_';
+        neighbors.push_back(insertU);
+        neighbors.push_back(changeU);
+    }
+    std::string insertU = word;
+    insertU = insertU.insert(word_len, 1, '_');
+    neighbors.push_back(insertU);
 
+    return neighbors;
+}
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
     if (word_list.find(end_word) == word_list.end() || begin_word == end_word ) {
